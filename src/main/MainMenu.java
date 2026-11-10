@@ -4,22 +4,24 @@ import java.util.Scanner;
 
 public class MainMenu {
 
-    private static final int EXIT_SELECTION = 2;
-	private static final int MAX_SELECTION = 2;
+    private static final int EXIT_SELECTION = 3;
+	private static final int MAX_SELECTION = 3;
 
-	private BankAccount userAccount;
+	private Bank bank;
     private Scanner keyboardInput;
 
     public MainMenu() {
-        this.userAccount = new BankAccount();
+        this.bank = new Bank();
+        this.bank.openAccount();
         this.keyboardInput = new Scanner(System.in);
     }
 
     public void displayOptions() {
         System.out.println("Welcome to the 237 Bank App!");
-        
+
         System.out.println("1. Make a deposit");
-        System.out.println("2. Exit the app");
+        System.out.println("2. Open a new account");
+        System.out.println("3. Exit the app");
 
     }
 
@@ -36,16 +38,36 @@ public class MainMenu {
         switch (selection) {
             case 1:
                 performDeposit();
+                break;
+            case 2:
+                performOpenAccount();
+                break;
         }
     }
 
+    public int selectAccountNumber() {
+        System.out.println("Your accounts: " + bank.getAccountNumbers());
+        int accountNumber = -1;
+        while(!bank.hasAccount(accountNumber)) {
+            System.out.print("Enter an account number: ");
+            accountNumber = keyboardInput.nextInt();
+        }
+        return accountNumber;
+    }
+
     public void performDeposit() {
+        BankAccount account = bank.getAccount(selectAccountNumber());
         double depositAmount = -1;
         while(depositAmount < 0) {
             System.out.print("How much would you like to deposit: ");
             depositAmount = keyboardInput.nextInt();
         }
-        userAccount.deposit(depositAmount);
+        account.deposit(depositAmount);
+    }
+
+    public void performOpenAccount() {
+        int accountNumber = bank.openAccount();
+        System.out.println("Opened new account #" + accountNumber);
     }
 
     public void run() {
