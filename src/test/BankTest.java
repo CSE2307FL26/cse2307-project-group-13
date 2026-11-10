@@ -51,4 +51,33 @@ public class BankTest {
             //do nothing, test passes
         }
     }
+
+    @Test
+    public void testBalanceOfEachAccount() {
+        Bank testBank = new Bank();
+        int firstAccount = testBank.openAccount();
+        int secondAccount = testBank.openAccount();
+        testBank.getAccount(firstAccount).deposit(50);
+        testBank.getAccount(secondAccount).deposit(20);
+        assertEquals(50, testBank.getBalance(firstAccount), 0.01);
+        assertEquals(20, testBank.getBalance(secondAccount), 0.01);
+    }
+
+    @Test
+    public void testBalanceOfNewAccount() {
+        Bank testBank = new Bank();
+        int accountNumber = testBank.openAccount();
+        assertEquals(0, testBank.getBalance(accountNumber), 0.01);
+    }
+
+    @Test
+    public void testBalanceOfInvalidAccount() {
+        Bank testBank = new Bank();
+        try {
+            testBank.getBalance(5);
+            fail();
+        } catch (IllegalArgumentException e) {
+            //do nothing, test passes
+        }
+    }
 }

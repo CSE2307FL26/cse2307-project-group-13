@@ -4,8 +4,8 @@ import java.util.Scanner;
 
 public class MainMenu {
 
-    private static final int EXIT_SELECTION = 3;
-	private static final int MAX_SELECTION = 3;
+    private static final int EXIT_SELECTION = 4;
+	private static final int MAX_SELECTION = 4;
 
 	private Bank bank;
     private Scanner keyboardInput;
@@ -21,7 +21,8 @@ public class MainMenu {
 
         System.out.println("1. Make a deposit");
         System.out.println("2. Open a new account");
-        System.out.println("3. Exit the app");
+        System.out.println("3. Check an account balance");
+        System.out.println("4. Exit the app");
 
     }
 
@@ -41,6 +42,9 @@ public class MainMenu {
                 break;
             case 2:
                 performOpenAccount();
+                break;
+            case 3:
+                performCheckBalance();
                 break;
         }
     }
@@ -68,6 +72,11 @@ public class MainMenu {
     public void performOpenAccount() {
         int accountNumber = bank.openAccount();
         System.out.println("Opened new account #" + accountNumber);
+    }
+
+    public void performCheckBalance() {
+        int accountNumber = selectAccountNumber();
+        System.out.printf("Account #%d balance: $%.2f%n", accountNumber, bank.getBalance(accountNumber));
     }
 
     public void run() {
