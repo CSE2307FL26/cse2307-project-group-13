@@ -2,10 +2,10 @@
 
 ## Team Members:
 
-* 
-* 
-* 
-* 
+* Ahmed Elgamel
+* Ibrahim Kuziez
+* Juliet Bailey
+  
 
 ## User stories
 
