@@ -9,7 +9,7 @@ public class BankAccount {
     }
 
     public void deposit(double amount) {
-        if(amount > 0) {
+        if (amount > 0) {
             this.balance += amount;
         } else {
             throw new IllegalArgumentException();
@@ -18,5 +18,16 @@ public class BankAccount {
 
     public double getBalance() {
         return this.balance;
+    }
+
+    public void withdraw(double amount) {
+        if (amount <= 0 || !Double.isFinite(amount)) {
+            throw new IllegalArgumentException("Enter a positive withdrawal amount.");
+        }
+        if (amount > balance) {
+            throw new IllegalArgumentException("Insufficient funds.");
+        }
+
+        balance -= amount;
     }
 }

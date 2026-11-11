@@ -4,8 +4,13 @@ import java.util.Scanner;
 
 public class MainMenu {
 
-    private static final int EXIT_SELECTION = 4;
-    private static final int MAX_SELECTION = 4;
+    private static final int DEPOSIT_SELECTION = 1;
+    private static final int OPEN_ACCOUNT_SELECTION = 2;
+    private static final int CHECK_BALANCE_SELECTION = 3;
+    private static final int CLOSE_ACCOUNT_SELECTION = 4;
+    private static final int WITHDRAW_SELECTION = 5;
+    private static final int EXIT_SELECTION = 6;
+    private static final int MAX_SELECTION = 6;
 
     private Bank bank;
     private Scanner keyboardInput;
@@ -19,18 +24,26 @@ public class MainMenu {
     public void displayOptions() {
         System.out.println("Welcome to the 237 Bank App!");
 
-        System.out.println("1. Make a deposit");
-        System.out.println("2. Open a new account");
-        System.out.println("3. Check an account balance");
-        System.out.println("4. Exit the app");
+        System.out.println(DEPOSIT_SELECTION + ". Make a deposit");
+        System.out.println(OPEN_ACCOUNT_SELECTION + ". Open a new account");
+        System.out.println(CHECK_BALANCE_SELECTION + ". Check an account balance");
+        System.out.println(CLOSE_ACCOUNT_SELECTION + ". Close an account");
+        System.out.println(WITHDRAW_SELECTION + ". Withdraw funds");
+        System.out.println(EXIT_SELECTION + ". Exit the app");
 
     }
 
     public int getUserSelection(int max) {
         int selection = -1;
-        while(selection < 1 || selection > max) {
+        while (selection < 1 || selection > max) {
             System.out.print("Please make a selection: ");
-            selection = keyboardInput.nextInt();
+            try {
+                selection = keyboardInput.nextInt();
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter a number between 1 and " + max + ".");
+                keyboardInput.next();
+                continue;
+            }
         }
         return selection;
     }
@@ -38,15 +51,21 @@ public class MainMenu {
     public void processInput(int selection) {
         try {
             switch (selection) {
-                case 1:
-                performDeposit();
-                break;
-                case 2:
-                performOpenAccount();
-                break;
-                case 3:
-                performCloseAccount();
-                break;
+                case DEPOSIT_SELECTION:
+                    performDeposit();
+                    break;
+                case OPEN_ACCOUNT_SELECTION:
+                    performOpenAccount();
+                    break;
+                case CHECK_BALANCE_SELECTION:
+                    performCheckBalance();
+                    break;
+                case CLOSE_ACCOUNT_SELECTION:
+                    performCloseAccount();
+                    break;
+                case WITHDRAW_SELECTION:
+                    performWithdraw();
+                    break;
             }
         } catch (IllegalStateException e) {
             System.out.println(e.getMessage());
@@ -56,7 +75,7 @@ public class MainMenu {
     public int selectAccountNumber() {
         if (bank.getAccountNumbers().isEmpty()) {
             throw new IllegalStateException(
-            "No accounts available. Open a new account first."
+                    "No accounts available. Open a new account first."
             );
         }
 
@@ -74,9 +93,9 @@ public class MainMenu {
     public void performDeposit() {
         BankAccount account = bank.getAccount(selectAccountNumber());
         double depositAmount = -1;
-        while(depositAmount < 0) {
+        while (depositAmount < 0) {
             System.out.print("How much would you like to deposit: ");
-            depositAmount = keyboardInput.nextInt();
+            depositAmount = keyboardInput.nextDouble();
         }
         account.deposit(depositAmount);
     }
@@ -89,6 +108,8 @@ public class MainMenu {
     public void performCheckBalance() {
         int accountNumber = selectAccountNumber();
         System.out.printf("Account #%d balance: $%.2f%n", accountNumber, bank.getBalance(accountNumber));
+    }
+
     public void performCloseAccount() {
         int accountNumber = selectAccountNumber();
 
@@ -100,9 +121,25 @@ public class MainMenu {
         }
     }
 
+    public void performWithdraw() {
+        int accountNumber = selectAccountNumber();
+        BankAccount account = bank.getAccount(accountNumber);
+        double withdrawAmount = -1;
+        while (withdrawAmount < 0) {
+            System.out.print("How much would you like to withdraw: ");
+            withdrawAmount = keyboardInput.nextDouble();
+        }
+        try {
+            account.withdraw(withdrawAmount);
+            System.out.println("Successfully withdrew $" + withdrawAmount + " from account #" + accountNumber);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Withdrawal failed: " + e.getMessage());
+        }
+    }
+
     public void run() {
         int selection = -1;
-        while(selection != EXIT_SELECTION) {
+        while (selection != EXIT_SELECTION) {
             displayOptions();
             selection = getUserSelection(MAX_SELECTION);
             processInput(selection);
