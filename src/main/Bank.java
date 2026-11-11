@@ -35,4 +35,18 @@ public class Bank {
     public Set<Integer> getAccountNumbers() {
         return accounts.keySet();
     }
+
+    public void closeAccount(int accountNumber) {
+        BankAccount account = getAccount(accountNumber);
+
+        if (account.getBalance() != 0) {
+            throw new IllegalStateException(
+                "Account still has money. Please withdraw or transfer it first."
+            );
+        }
+
+        accounts.remove(accountNumber);
+
+    }
+
 }
