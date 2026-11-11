@@ -4,8 +4,8 @@ import java.util.Scanner;
 
 public class MainMenu {
 
-    private static final int EXIT_SELECTION = 3;
-	private static final int MAX_SELECTION = 3;
+    private static final int EXIT_SELECTION = 4;
+	private static final int MAX_SELECTION = 4;
 
 	private Bank bank;
     private Scanner keyboardInput;
@@ -21,7 +21,8 @@ public class MainMenu {
 
         System.out.println("1. Make a deposit");
         System.out.println("2. Open a new account");
-        System.out.println("3. Exit the app");
+        System.out.println("3. Close an account");
+	System.out.println("4. Exit the app");
 
     }
 
@@ -35,13 +36,22 @@ public class MainMenu {
     }
 
     public void processInput(int selection) {
-        switch (selection) {
-            case 1:
-                performDeposit();
-                break;
-            case 2:
-                performOpenAccount();
-                break;
+        if ((selection == 1 || selection ==3)
+		&& bank.getAccountNumbers().isEmpty()) {
+	System.out.println("No accounts available. Open a new account first.");
+	return;
+	}
+
+	switch (selection) {
+		case 1:
+			performDeposit();
+			break;
+		case 2:
+			performOpenAccount();
+			break;
+		case 3:
+			performCloseAccount();
+			break;
         }
     }
 
@@ -69,6 +79,17 @@ public class MainMenu {
         int accountNumber = bank.openAccount();
         System.out.println("Opened new account #" + accountNumber);
     }
+
+public void performCloseAccount() {
+	int accountNumber = selectAccountNumber();
+
+	try {
+		bank.closeAccount(accountNumber);
+		System.out.println("Account #" + accountNumber + " has been closed successfully.");
+	} catch (IllegalStateException e) {
+		System.out.println("Cannot close account: " + e.getMessage());
+	}
+}
 
     public void run() {
         int selection = -1;
