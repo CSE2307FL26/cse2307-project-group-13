@@ -1,10 +1,8 @@
 {
     "java.project.sourcePaths": [
-        "lib",
         "src"
     ],
     "java.project.referencedLibraries": [
-        "lib\\junit-platform-console-standalone-1.13.0-M3.jar",
-        "test-lib\\**\\*.jar"
+        "test-lib/junit-platform-console-standalone-6.0.1.jar"
     ]
 }
