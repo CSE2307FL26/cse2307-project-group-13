@@ -32,6 +32,10 @@ public class Bank {
         return accounts.get(accountNumber);
     }
 
+    public double getBalance(int accountNumber) {
+        return getAccount(accountNumber).getBalance();
+    }
+
     public Set<Integer> getAccountNumbers() {
         return accounts.keySet();
     }

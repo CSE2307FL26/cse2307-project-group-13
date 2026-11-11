@@ -21,8 +21,8 @@ public class MainMenu {
 
         System.out.println("1. Make a deposit");
         System.out.println("2. Open a new account");
-        System.out.println("3. Close an account");
-    System.out.println("4. Exit the app");
+        System.out.println("3. Check an account balance");
+        System.out.println("4. Exit the app");
 
     }
 
@@ -86,6 +86,9 @@ public class MainMenu {
         System.out.println("Opened new account #" + accountNumber);
     }
 
+    public void performCheckBalance() {
+        int accountNumber = selectAccountNumber();
+        System.out.printf("Account #%d balance: $%.2f%n", accountNumber, bank.getBalance(accountNumber));
     public void performCloseAccount() {
         int accountNumber = selectAccountNumber();
 
