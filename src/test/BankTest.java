@@ -80,4 +80,45 @@ public class BankTest {
             //do nothing, test passes
         }
     }
+@Test
+    public void testCloseEmptyAccount() {
+        Bank testBank = new Bank();
+        int accountNumber = testBank.openAccount();
+
+        testBank.closeAccount(accountNumber);
+
+        assertFalse(testBank.hasAccount(accountNumber));
+        assertEquals(0, testBank.getAccountNumbers().size());
+    }
+
+@Test
+    public void testCannotCloseAccountWithMoney() {
+        Bank testBank = new Bank();
+        int accountNumber = testBank.openAccount();
+
+        testBank.getAccount(accountNumber).deposit(100);
+
+        try {
+            testBank.closeAccount(accountNumber);
+            fail();
+        } catch (IllegalStateException e) {
+            // test passes
+        }
+
+        assertTrue(testBank.hasAccount(accountNumber));
+        assertEquals(100, testBank.getAccount(accountNumber).getBalance(), 0.01);
+    }
+
+@Test
+    public void testCannotCloseInvalidAccount() {
+        Bank testBank = new Bank();
+
+        try {
+            testBank.closeAccount(99);
+            fail();
+        } catch (IllegalArgumentException e) {
+            // test passes
+        }
+    }
+
 }
