@@ -5,6 +5,11 @@ import main.BankAccount;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 
 public class BankAccountTest {
@@ -27,7 +32,6 @@ public class BankAccountTest {
         }
     }
 
-    
     @Test
     public void testWithdrawReducesBalance() {
         BankAccount testAccount = new BankAccount();
@@ -76,4 +80,35 @@ public class BankAccountTest {
         } catch (IllegalArgumentException e) {
         }
     }
+
+    @Test
+    public void testTransactionHistoryInOrder() {
+        BankAccount account = new BankAccount();
+
+        account.deposit(50);
+        account.withdraw(12.50);
+
+        assertEquals(List.of("Deposit: +$50.00", "Withdrawal: -$12.50"),
+                account.getTransactionHistory());
+    }
+
+    @Test
+    public void testRejectedWithdrawalNotInHistory() {
+        BankAccount account = new BankAccount();
+        account.deposit(50);
+
+        assertThrows(IllegalArgumentException.class, () -> account.withdraw(60));
+
+        assertEquals(List.of("Deposit: +$50.00"), account.getTransactionHistory());
+    }
+
+    @Test
+    public void testRejectedDepositNotInHistory() {
+        BankAccount account = new BankAccount();
+
+        assertThrows(IllegalArgumentException.class, () -> account.deposit(-20));
+
+        assertTrue(account.getTransactionHistory().isEmpty());
+    }
+
 }

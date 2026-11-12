@@ -1,5 +1,6 @@
 package main;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class MainMenu {
@@ -10,8 +11,9 @@ public class MainMenu {
     private static final int CLOSE_ACCOUNT_SELECTION = 4;
     private static final int WITHDRAW_SELECTION = 5;
     private static final int TRANSFER_SELECTION = 6;
-    private static final int EXIT_SELECTION = 7;
-    private static final int MAX_SELECTION = 7;
+    private static final int SHOW_HISTORY_SELECTION = 7;
+    private static final int EXIT_SELECTION = 8;
+    private static final int MAX_SELECTION = 8;
 
     private Bank bank;
     private Scanner keyboardInput;
@@ -31,6 +33,7 @@ public class MainMenu {
         System.out.println(CLOSE_ACCOUNT_SELECTION + ". Close an account");
         System.out.println(WITHDRAW_SELECTION + ". Withdraw funds");
         System.out.println(TRANSFER_SELECTION + ". Transfer between accounts");
+        System.out.println(SHOW_HISTORY_SELECTION + ". Show transaction history");
         System.out.println(EXIT_SELECTION + ". Exit the app");
 
     }
@@ -70,6 +73,9 @@ public class MainMenu {
                     break;
                 case TRANSFER_SELECTION:
                     performTransfer();
+                    break;
+                case SHOW_HISTORY_SELECTION:
+                    performShowHistory();
                     break;
             }
         } catch (IllegalStateException e) {
@@ -155,6 +161,20 @@ public class MainMenu {
                     transferAmount, fromAccountNumber, toAccountNumber);
         } catch (IllegalArgumentException e) {
             System.out.println("Transfer failed: " + e.getMessage());
+        }
+    }
+
+    public void performShowHistory() {
+        int accountNumber = selectAccountNumber();
+        List<String> history = bank.getAccount(accountNumber).getTransactionHistory();
+        System.out.println("Transaction history for account #" + accountNumber + ":");
+        if (history.isEmpty()) {
+            System.out.println("No transactions found.");
+            return;
+        }
+
+        for (String transaction : history) {
+            System.out.println(transaction);
         }
     }
 
