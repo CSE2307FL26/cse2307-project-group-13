@@ -53,4 +53,14 @@ public class Bank {
 
     }
 
+    public void transfer(int fromAccountNumber, int toAccountNumber, double amount) {
+        if (fromAccountNumber == toAccountNumber) {
+            throw new IllegalArgumentException("Cannot transfer to the same account.");
+        }
+        BankAccount fromAccount = getAccount(fromAccountNumber);
+        BankAccount toAccount = getAccount(toAccountNumber);
+        fromAccount.withdraw(amount);
+        toAccount.deposit(amount);
+    }
+
 }

@@ -9,8 +9,9 @@ public class MainMenu {
     private static final int CHECK_BALANCE_SELECTION = 3;
     private static final int CLOSE_ACCOUNT_SELECTION = 4;
     private static final int WITHDRAW_SELECTION = 5;
-    private static final int EXIT_SELECTION = 6;
-    private static final int MAX_SELECTION = 6;
+    private static final int TRANSFER_SELECTION = 6;
+    private static final int EXIT_SELECTION = 7;
+    private static final int MAX_SELECTION = 7;
 
     private Bank bank;
     private Scanner keyboardInput;
@@ -29,6 +30,7 @@ public class MainMenu {
         System.out.println(CHECK_BALANCE_SELECTION + ". Check an account balance");
         System.out.println(CLOSE_ACCOUNT_SELECTION + ". Close an account");
         System.out.println(WITHDRAW_SELECTION + ". Withdraw funds");
+        System.out.println(TRANSFER_SELECTION + ". Transfer between accounts");
         System.out.println(EXIT_SELECTION + ". Exit the app");
 
     }
@@ -65,6 +67,9 @@ public class MainMenu {
                     break;
                 case WITHDRAW_SELECTION:
                     performWithdraw();
+                    break;
+                case TRANSFER_SELECTION:
+                    performTransfer();
                     break;
             }
         } catch (IllegalStateException e) {
@@ -134,6 +139,22 @@ public class MainMenu {
             System.out.println("Successfully withdrew $" + withdrawAmount + " from account #" + accountNumber);
         } catch (IllegalArgumentException e) {
             System.out.println("Withdrawal failed: " + e.getMessage());
+        }
+    }
+
+    public void performTransfer() {
+        System.out.println("Transfer from:");
+        int fromAccountNumber = selectAccountNumber();
+        System.out.println("Transfer to:");
+        int toAccountNumber = selectAccountNumber();
+        System.out.print("How much would you like to transfer: ");
+        double transferAmount = keyboardInput.nextDouble();
+        try {
+            bank.transfer(fromAccountNumber, toAccountNumber, transferAmount);
+            System.out.printf("Transferred $%.2f from account #%d to account #%d%n",
+                    transferAmount, fromAccountNumber, toAccountNumber);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Transfer failed: " + e.getMessage());
         }
     }
 

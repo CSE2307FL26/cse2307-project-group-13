@@ -121,4 +121,72 @@ public class BankTest {
         }
     }
 
+    @Test
+    public void testTransfer() {
+        Bank testBank = new Bank();
+        int fromAccount = testBank.openAccount();
+        int toAccount = testBank.openAccount();
+        testBank.getAccount(fromAccount).deposit(100);
+        testBank.transfer(fromAccount, toAccount, 40);
+        assertEquals(60, testBank.getBalance(fromAccount), 0.01);
+        assertEquals(40, testBank.getBalance(toAccount), 0.01);
+    }
+
+    @Test
+    public void testTransferMoreThanBalance() {
+        Bank testBank = new Bank();
+        int fromAccount = testBank.openAccount();
+        int toAccount = testBank.openAccount();
+        testBank.getAccount(fromAccount).deposit(50);
+        try {
+            testBank.transfer(fromAccount, toAccount, 80);
+            fail();
+        } catch (IllegalArgumentException e) {
+            //do nothing, test passes
+        }
+        assertEquals(50, testBank.getBalance(fromAccount), 0.01);
+        assertEquals(0, testBank.getBalance(toAccount), 0.01);
+    }
+
+    @Test
+    public void testTransferNegativeAmount() {
+        Bank testBank = new Bank();
+        int fromAccount = testBank.openAccount();
+        int toAccount = testBank.openAccount();
+        testBank.getAccount(fromAccount).deposit(50);
+        try {
+            testBank.transfer(fromAccount, toAccount, -20);
+            fail();
+        } catch (IllegalArgumentException e) {
+            //do nothing, test passes
+        }
+    }
+
+    @Test
+    public void testTransferToSameAccount() {
+        Bank testBank = new Bank();
+        int accountNumber = testBank.openAccount();
+        testBank.getAccount(accountNumber).deposit(50);
+        try {
+            testBank.transfer(accountNumber, accountNumber, 20);
+            fail();
+        } catch (IllegalArgumentException e) {
+            //do nothing, test passes
+        }
+    }
+
+    @Test
+    public void testTransferToInvalidAccount() {
+        Bank testBank = new Bank();
+        int fromAccount = testBank.openAccount();
+        testBank.getAccount(fromAccount).deposit(50);
+        try {
+            testBank.transfer(fromAccount, 99, 20);
+            fail();
+        } catch (IllegalArgumentException e) {
+            //do nothing, test passes
+        }
+        assertEquals(50, testBank.getBalance(fromAccount), 0.01);
+    }
+
 }
