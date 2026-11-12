@@ -16,7 +16,7 @@ public class BankAccount {
     public void deposit(double amount) {
         if (amount > 0) {
             this.balance += amount;
-            transactionHistory.add("Deposit: +$" + amount);
+            transactionHistory.add(String.format("Deposit: +$%.2f", amount));
         } else {
             throw new IllegalArgumentException();
         }
@@ -35,7 +35,7 @@ public class BankAccount {
         }
 
         balance -= amount;
-        transactionHistory.add("Withdrawal: -$" + amount);
+        transactionHistory.add(String.format("Withdrawal: -$%.2f", amount));
     }
 
     public List<String> getTransactionHistory() {
